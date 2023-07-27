@@ -10,6 +10,19 @@ router.get("/employees", async (req, res) => {
   }
 });
 
+router.get("/employees/:id", async (req, res) => {
+  try {
+    const employeeId = req.params.id;
+    const employee = await Employee.findOne({ Id: employeeId });
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    res.json(employee);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve employee" });
+  }
+});
+
 router.post("/employees", async (req, res) => {
   try {
     const lastEmployee = await Employee.findOne().sort({ Id: -1 });
